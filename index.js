@@ -85,7 +85,24 @@ function restricted(req, res, next) {
     }
 }
 
+server.get('/api/users', restricted, (req, res) => {
+    Users
+        .find()
+        .then(users => {
+            res.json({ users, decodedToken: req.decode });
+        })
+        .catch(err => res.send(err));
+    }
+)
 
+server.get('/users', restricted, async (req, res) => {
+    try {
+        const users = await Users.find();
+        res.json(users);
+    } catch(error) {
+        res.send(error);
+    }
+});
 
 const port = process.env.PORT || 5000;
 
