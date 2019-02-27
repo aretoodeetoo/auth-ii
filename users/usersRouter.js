@@ -2,6 +2,6 @@ const express = require('express');
 
 // const Users = require('db');
 
-const router = express.Router();
+// const router = express.Router();
 
 // user endpoints 
