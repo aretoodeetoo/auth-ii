@@ -59,9 +59,15 @@ server.post('/api/login', (req, res) => {
         .then(user => {
             if (user && bcrypt.compareSync(password, user.password)) {
                 const token = createToken(user);
-                res.status(200).json({ message: `Welcome to the dark side, ${user.username}`});
+                res.status(200).json({ 
+                    message: `Welcome to the dark side, ${user.username}`,
+                    token,
+                    secret,
+                });
             } else {
-                res.status(401).json({ message: 'Username or password is incorrect'})
+                res.status(401).json({ 
+                    message: 'Username or password is incorrect'
+                })
             }
         })
         .catch(error => {
@@ -74,12 +80,12 @@ function restricted(req, res, next) {
     if (token){
         jwt.verify(token, secret, (err, decodedToken) => {
             if (err) {
-                res.status(401).json({ message: 'You have meddled with things you should not'});
+                res.status(401).json({ message: 'You shall not pass'});
             } else {
                 req.decode = decodedToken;
                 next();
             }
-        })
+        });
     } else {
         res.status(401).json({ message: 'Unauthorized attempt at entry. Area 51 has been notified.' });
     }
@@ -95,14 +101,14 @@ server.get('/api/users', restricted, (req, res) => {
     }
 )
 
-server.get('/users', restricted, async (req, res) => {
-    try {
-        const users = await Users.find();
-        res.json(users);
-    } catch(error) {
-        res.send(error);
-    }
-});
+// server.get('/users', restricted, async (req, res) => {
+//     try {
+//         const users = await Users.find();
+//         res.json(users);
+//     } catch(error) {
+//         res.send(error);
+//     }
+// });
 
 const port = process.env.PORT || 5000;
 
