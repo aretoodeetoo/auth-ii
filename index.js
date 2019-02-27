@@ -69,6 +69,24 @@ server.post('/api/login', (req, res) => {
         });
 });
 
+function restricted(req, res, next) {
+    const token = req.headers.authorization;
+    if (token){
+        jwt.verify(token, secret, (err, decodedToken) => {
+            if (err) {
+                res.status(401).json({ message: 'You have meddled with things you should not'});
+            } else {
+                req.decode = decodedToken;
+                next();
+            }
+        })
+    } else {
+        res.status(401).json({ message: 'Unauthorized attempt at entry. Area 51 has been notified.' });
+    }
+}
+
+
+
 const port = process.env.PORT || 5000;
 
 server.listen(port, () => {
