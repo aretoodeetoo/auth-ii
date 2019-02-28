@@ -23,13 +23,13 @@ router.post('/signup', (req, res) => {
 router.post('/login', (req, res) => {
     let { username, password } = req.body;
 
-    Users.findBy({ user })
+    Users.findBy({ username })
         .first()
         .then(user => {
             if(user && bcrypt.compareSync(password, user.password)){
                 const token = tokenFunctions.createToken(user);
                 res.status(200).json({
-                    message: `Welcome to The List`,
+                    message: `Hello ${user.username}. Welcome to The List`,
                     token
                 });
             } else {
