@@ -1,5 +1,5 @@
 // require('dotenv').config();
-// const server = require('./server');
+// const server = require('./api/server');
 
 const express = require('express');
 const helmet = require('helmet');
