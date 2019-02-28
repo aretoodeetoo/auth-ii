@@ -1,17 +1,22 @@
 // imports
 const express = require('express');
-const helmet = require('helmet');
+const applyGlobalMiddleware = require('./globalMiddleware');
 
-// const usersRouter = require('./users/usersRouter');
+// Route Imports
+const usersRouter = require('../routes/users/usersRouter');
+const authRouter = require('../routes/auth/authRouter');
+const secrets = require('../config/secrets.js');
 
 // server commands
 const server = express();
-server.use(express.json());
-server.use(helmet());
 
+applyGlobalMiddleware(server);
+
+// Use Routes
+server.use('/api/auth', authRouter);
 // server.use('/api/users', usersRouter);
 
-server.get('/', async (req, res) => {
+server.get('/', (req, res) => {
     res.send(`It's working!!!`);
 })
 
